@@ -69,7 +69,7 @@ class DIYables_4Digit7Segment_74HC595
     void setNumber(int pos, int value);
     void setChar(int pos, SegChars value);
     void show();
-    void loop();
+    void loop(int delay_us=0);
     void printInt(int number, bool zero_padding);
     void printFloat(float number, int decimal_place, bool zero_padding);
 };

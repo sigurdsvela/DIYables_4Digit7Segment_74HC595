@@ -126,7 +126,9 @@ void DIYables_4Digit7Segment_74HC595::show() {
     _digit_values[i] = _digit_sets[i];
 }
 
-void DIYables_4Digit7Segment_74HC595::loop() {
+void DIYables_4Digit7Segment_74HC595::loop(int delay_us) {
+  // Disable interupts to avoid flickering
+  cli();
   for (int i = 0; i < 4; i++) {
     int digit = 0x08 >> i;
     int value = _digit_values[i];
@@ -138,7 +140,14 @@ void DIYables_4Digit7Segment_74HC595::loop() {
     this->shift(digit);
     digitalWrite(_rclk, LOW);
     digitalWrite(_rclk, HIGH);
+    delayMicroseconds(delay_us);
   }
+  this->shift(0xFF); // turn off all digits
+  this->shift(0x00);
+  digitalWrite(_rclk, LOW);
+  digitalWrite(_rclk, HIGH);
+  delayMicroseconds(delay_us);
+  sei();
 }
 
 void DIYables_4Digit7Segment_74HC595::shift(byte value) {
